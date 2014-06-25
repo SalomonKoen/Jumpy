@@ -1,6 +1,6 @@
 package com.example.jumpy;
 
-public enum powerType
+public enum PowerType
 {
 	a, b, c;
 }

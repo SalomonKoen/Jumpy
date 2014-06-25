@@ -22,7 +22,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db)
 	{
 		createPlayerTable(db);
-		createHighscoresTable(db);
+		createHighscoreTable(db);
 		createItemTable(db);
 		createPowerupTable(db);
 		createWeaponTable(db);
@@ -35,7 +35,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		db.execSQL("DROP TABLE IF EXISTS Highscores;");
+		db.execSQL("DROP TABLE IF EXISTS Highscore;");
 		db.execSQL("DROP TABLE IF EXISTS Player;");
 		db.execSQL("DROP TABLE IF EXISTS Powerup;");
 		db.execSQL("DROP TABLE IF EXISTS Weapon;");
@@ -48,9 +48,13 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		this.onCreate(db);
 	}
 	
-	private void createHighscoresTable(SQLiteDatabase db)
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//CREATE TABLES
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
+	private void createHighscoreTable(SQLiteDatabase db)
 	{
-		String sql = "CREATE TABLE Highscores ("
+		String sql = "CREATE TABLE Highscore ("
 				+ "highscore_id INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ "player_id INTEGER FOREIGN KEY REFERENCES Player(player_id), "
 				+ "score INTEGER, "
@@ -137,6 +141,10 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		db.execSQL(sql);
 	}
 	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//HIGHSCORE
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	public void addHighscore(Highscore highscore)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -146,7 +154,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		values.put("score", highscore.getScore());
 		values.put("height", highscore.getHeight());
 		
-		db.insert("Highscores", null, values);
+		db.insert("Highscore", null, values);
 		db.close();
 	}
 	
@@ -154,9 +162,9 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	{
 		ArrayList<Highscore> highscores = new ArrayList<Highscore>();
 		
-		String sql = "SELECT * FROM Highscores "
+		String sql = "SELECT * FROM Highscore "
 				+ "WHERE player_id=" + player_id + " "
-						+ "ORDER BY score, height DESC;";
+						+ "ORDER BY score DESC, height DESC;";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
@@ -176,8 +184,8 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	{
 		ArrayList<Highscore> highscores = new ArrayList<Highscore>();
 		
-		String sql = "SELECT * FROM Highscores "
-				+ "ORDER BY score, height DESC;";
+		String sql = "SELECT * FROM Highscore "
+				+ "ORDER BY score DESC, height DESC;";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
@@ -193,6 +201,10 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		
 		return highscores;
 	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//ITEM
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public ArrayList<Item> getItems()
 	{
@@ -260,6 +272,10 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		
 		return items;
 	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//PLAYER
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public Player addPlayer(String name)
 	{
