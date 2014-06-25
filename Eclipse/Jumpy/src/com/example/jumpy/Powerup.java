@@ -2,7 +2,7 @@ package com.example.jumpy;
 
 public class Powerup extends Item
 {
-	private powerType type;
+	private PowerType type;
 	private int value;
 	
 	public Powerup(int id, String description, boolean multiple, int type, int value)
@@ -12,13 +12,13 @@ public class Powerup extends Item
 		switch (type)
 		{
 			case 0:
-				this.type = powerType.a;
+				this.type = PowerType.a;
 				break;
 			case 1:
-				this.type = powerType.b;
+				this.type = PowerType.b;
 				break;
 			case 2:
-				this.type = powerType.c;
+				this.type = PowerType.c;
 				break;
 		}
 		
