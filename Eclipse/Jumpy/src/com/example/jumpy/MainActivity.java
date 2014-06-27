@@ -11,6 +11,13 @@ import android.view.View;
 
 public class MainActivity extends Activity
 {
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		
+		Settings.loadSettings(getSharedPreferences("Settings", 0));
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -30,10 +37,12 @@ public class MainActivity extends Activity
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int id = item.getItemId();
+		
 		if (id == R.id.action_settings)
 		{
 			return true;
 		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -60,5 +69,4 @@ public class MainActivity extends Activity
 		Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 		startActivity(intent);
 	}
-
 }
