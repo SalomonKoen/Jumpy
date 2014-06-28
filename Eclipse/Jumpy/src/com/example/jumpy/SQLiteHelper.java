@@ -77,6 +77,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	{
 		String sql = "CREATE TABLE Item ("
 				+ "item_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ "name text, "
 				+ "description text, "
 				+ "type INTEGER CONSTRAINT check_type CHECK (type IN (0, 1, 2)), "
 				+ "multiple BOOLEAN);";
@@ -224,9 +225,10 @@ public class SQLiteHelper extends SQLiteOpenHelper
 				Item item = null;
 				
 				int id = cursor.getInt(0);
-				int type = cursor.getInt(2);
-				String description = cursor.getString(1);
-				boolean multiple = cursor.getInt(3) > 0;
+				int type = cursor.getInt(3);
+				String name = cursor.getString(1);
+				String description = cursor.getString(2);
+				boolean multiple = cursor.getInt(4) > 0;
 				
 				if (type == 0)
 				{
@@ -237,7 +239,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 					
 					if (cursor2.moveToFirst())
 					{
-						item = new Character(id, description, multiple, cursor2.getInt(1), cursor2.getInt(2));
+						item = new Character(id, name, description, multiple, cursor2.getInt(1), cursor2.getInt(2));
 					}
 				}
 				else if (type == 1)
@@ -249,7 +251,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 					
 					if (cursor2.moveToFirst())
 					{
-						item = new Powerup(id, description, multiple, cursor2.getInt(1), cursor2.getInt(2));
+						item = new Powerup(id, name, description, multiple, cursor2.getInt(1), cursor2.getInt(2));
 					}
 				}
 				else if (type == 2)
@@ -261,7 +263,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 					
 					if (cursor2.moveToFirst())
 					{
-						item = new Weapon(id, description, multiple, cursor2.getInt(1));
+						item = new Weapon(id, name, description, multiple, cursor2.getInt(1));
 					}
 				}
 				

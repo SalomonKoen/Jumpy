@@ -69,4 +69,10 @@ public class MainActivity extends Activity
 		Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
 		startActivity(intent);
 	}
+	
+	public void onStoreClick(View view)
+	{
+		Intent intent = new Intent(MainActivity.this, StoreActivity.class);
+		startActivity(intent);
+	}
 }

@@ -26,6 +26,10 @@
             android:name="com.example.jumpy.SettingsActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.example.jumpy.StoreActivity"
+            android:label="@string/title_activity_store" >
+        </activity>
     </application>
 
 </manifest>
