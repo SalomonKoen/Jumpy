@@ -116,7 +116,7 @@ public class SettingsActivity extends Activity
 		else
 			quality = 2;
 		
-		Settings.saveSettings(getSharedPreferences("Settings", 0), seekMusic.getProgress(), seekEffects.getProgress(), quality);
+		Settings.saveSettings(getSharedPreferences("Settings", 0), seekMusic.getProgress(), seekEffects.getProgress(), quality, ((JumpyApplication)this.getApplication()).getPlayer().getId());
 		
 		finish();
 	}

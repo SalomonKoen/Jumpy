@@ -8,27 +8,27 @@ import android.widget.ListView;
 
 public class StoreActivity extends Activity
 {
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.store_menu);
 		
-		StoreAdapter adapter = new StoreAdapter(this, generateData());
+		//SQLiteHelper helper = new SQLiteHelper(this);
+		
+		ArrayList<Item> items = new ArrayList<Item>();
+		items.add(new Character(1,"Blabla","adslkd dkdjdd fhfhdkdf dk", false, 50, 1, 20, 100));
+		items.add(new Weapon(1,"aDSdf","asdff fdfs sd  ds ffffffffffffffd ddddddddddkdjdd fhfhdkdf dk", true, 50, 1, 2));
+		items.add(new Powerup(1,"e rwwer","adslkd dkdjdd fhfhdkdf dk", true, 50, 1, 3, 200));
+		items.add(new Character(1,"E ds s","adslkd dkdjdd fhfhdkdf dk", false, 50, 1, 20, 100));
+		items.add(new Character(1,"Blabla","adslkd dkdjdd fhfhdkdf dk", false, 50, 1, 20, 100));
+		items.add(new Weapon(1,"aDSdf","asdff fdfs sd  ds ffffffffffffffd ddddddddddkdjdd fhfhdkdf dk", true, 50, 1, 2));
+		items.add(new Powerup(1,"e rwwer","adslkd dkdjdd fhfhdkdf dk", true, 50, 1, 3, 200));
+		items.add(new Character(1,"E ds s","adslkd dkdjdd fhfhdkdf dk", false, 50, 1, 20, 100));
+		
+		StoreAdapter adapter = new StoreAdapter(this, items, ((JumpyApplication)this.getApplication()).getPlayer());
 		
 		ListView listView = (ListView)findViewById(R.id.list);
 		listView.setAdapter(adapter);
-	}
-	
-	public ArrayList<StoreItem> generateData()
-	{
-		ArrayList<StoreItem> items = new ArrayList<StoreItem>();
-		items.add(new StoreItem(1,"hello","hi",true,100));
-		items.add(new StoreItem(2,"heasdfadllo","hi",false,100));
-		items.add(new StoreItem(3,"helfffflo","hsdffci",true,1080));
-		items.add(new StoreItem(4,"heldsdsdlo","h2sdfi",false,700));
-		
-		return items;
 	}
 }

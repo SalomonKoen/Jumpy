@@ -4,15 +4,20 @@ import java.util.ArrayList;
 
 public class Inventory
 {
-	private ArrayList<InventoryItem> items = new ArrayList<InventoryItem>();
+	private ArrayList<Item> items = new ArrayList<Item>();
 
-	public Inventory(ArrayList<InventoryItem> items)
+	public Inventory(ArrayList<Item> items)
 	{
 		this.items = items;
 	}
 	
-	public void addItem(Item item, int quantity)
+	public void addItem(Item item)
 	{
-		this.items.add(new InventoryItem(item, quantity));
+		this.items.add(item);
+	}
+	
+	public ArrayList<Item> getItems()
+	{
+		return items;
 	}
 }

@@ -8,6 +8,7 @@ public class Settings
 	private static int music = 100;
 	private static int effects = 100;
 	private static int graphics = 1;
+	private static int player_id = 1;
 	
 	private static boolean loaded = false;
 
@@ -16,6 +17,7 @@ public class Settings
 		music = preferences.getInt("musicVolume", music);
 		effects = preferences.getInt("effectsVolume", effects);
 		graphics = preferences.getInt("graphicsQuality", graphics);
+		player_id = preferences.getInt("playerID", player_id);
 
 		loaded = true;
 	}
@@ -40,7 +42,7 @@ public class Settings
 		return loaded;
 	}
 
-	public static void saveSettings(SharedPreferences preferences, int music, int effects, int graphics)
+	public static void saveSettings(SharedPreferences preferences, int music, int effects, int graphics, int player_id)
 	{
 		Editor editor = preferences.edit();
 		
@@ -51,6 +53,8 @@ public class Settings
 		editor.putInt("musicVolume", music);
 		editor.putInt("effectsVolume", effects);
 		editor.putInt("graphicsQuality", graphics);
+		
+		editor.putInt("playerID", player_id);
 		
 		editor.commit();
 	}

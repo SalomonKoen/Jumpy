@@ -7,20 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class StoreAdapter extends ArrayAdapter<StoreItem>
+public class StoreAdapter extends ArrayAdapter<Item>
 {
 	private final Context context;
-	private final ArrayList<StoreItem> items;
+	private ArrayList<Item> items = new ArrayList<Item>();
+	private Player player;
 	
-	public StoreAdapter(Context context, ArrayList<StoreItem> items)
+	public StoreAdapter(Context context, ArrayList<Item> items, Player player)
 	{
 		super(context, R.layout.store_item, items);
 		
 		this.context = context;
-		this.items = items;
+		
+		if (items != null)
+			this.items = items;
+		
+		this.player = player;
 	}
 	
 	@Override
@@ -30,10 +36,37 @@ public class StoreAdapter extends ArrayAdapter<StoreItem>
 		
 		View rowView = inflater.inflate(R.layout.store_item, parent, false);
 		
-		ImageView image = (ImageView)rowView.findViewById(R.id.image);
-		TextView text = (TextView)rowView.findViewById(R.id.text);
+		Item cur = items.get(position);
 		
-		text.setText(items.get(position).getName());
+		ImageView image = (ImageView)rowView.findViewById(R.id.image);
+		
+		TextView name = (TextView)rowView.findViewById(R.id.name);
+		TextView description = (TextView)rowView.findViewById(R.id.description);
+		
+		TextView quantity = (TextView)rowView.findViewById(R.id.quantity);
+		Button buy = (Button)rowView.findViewById(R.id.buy);
+		
+		name.setText(cur.getName());
+		description.setText(cur.getDescription());
+		
+		if (cur.isMultiple())
+			quantity.setText(Integer.toString(cur.getQuantity()));
+		else
+		{
+			quantity.setText("");
+			
+			if (cur.getQuantity() == 1)
+			{
+				buy.setEnabled(false);
+			}
+		}
+		
+		if (cur.getPrice() > player.getCoins())
+		{
+			buy.setEnabled(false);
+		}
+		
+		buy.setText(Integer.toString(cur.getPrice()));
 		
 		return rowView;
 	}
