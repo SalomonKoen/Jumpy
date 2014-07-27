@@ -54,7 +54,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	{
 		String sql = "CREATE TABLE Highscore ("
 				+ "highscore_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "player_id INTEGER FOREIGN KEY REFERENCES Player(player_id), "
+				+ "player_id INTEGER REFERENCES Player(player_id), "
 				+ "score INTEGER, "
 				+ "height INTEGER);";
 		
@@ -116,9 +116,10 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	private void createInventoryTable(SQLiteDatabase db)
 	{
 		String sql = "CREATE TABLE Inventory ("
-				+ "player_id INTEGER PRIMARY KEY REFERENCES Player(player_id), "
-				+ "item_id INTEGER PRIMARY KEY REFERENCES Item(item_id), "
-				+ "quantity INTEGER);";
+				+ "player_id INTEGER REFERENCES Player(player_id), "
+				+ "item_id INTEGER REFERENCES Item(item_id), "
+				+ "quantity INTEGER, "
+				+ "PRIMARY KEY (player_id, item_id));";
 		
 		db.execSQL(sql);
 	}
@@ -146,6 +147,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		values.put("height", highscore.getHeight());
 		
 		db.insert("Highscore", null, values);
+		
 		db.close();
 	}
 	
@@ -168,6 +170,8 @@ public class SQLiteHelper extends SQLiteOpenHelper
 			} while (cursor.moveToNext());
 		}
 		
+		db.close();
+		
 		return highscores;
 	}
 	
@@ -189,6 +193,8 @@ public class SQLiteHelper extends SQLiteOpenHelper
 				highscores.add(highscore);
 			} while (cursor.moveToNext());
 		}
+		
+		db.close();
 		
 		return highscores;
 	}
@@ -316,22 +322,24 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	//PLAYER
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
+	
 	public Player addPlayer(String name)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		
-		String sql = "INSERT INTO Player "
-				+ "VALUES ('" + name + "',"
-						+ "0);";
+		ContentValues values = new ContentValues();
+		values.put("name", name);
+		values.put("coins", 100);
+		
+		db.insert("Player", null, values);
 		
 		ArrayList<Item> items = getItems();
-		
-		db.execSQL(sql);
 		
 		String sql2 = "SELECT player_id FROM Player;";
 		int id = 1;
 		
 		db = this.getReadableDatabase();
+		
 		Cursor cursor = db.rawQuery(sql2, null);
 		
 		if (cursor.moveToLast())
@@ -339,14 +347,15 @@ public class SQLiteHelper extends SQLiteOpenHelper
 			id = cursor.getInt(0);
 		}
 		
-		db = this.getWritableDatabase();
-		
 		for (Item item : items)
 		{
-			String sql3	= "INSERT INTO Inventory "
-					+ "VALUES (" + id + ", " + item.getId() + ", 1);";
+			ContentValues values2 = new ContentValues();
 			
-			db.execSQL(sql3);
+			values2.put("item_id", item.getId());
+			values2.put("player_id", id);
+			values2.put("quantity", 0);
+			
+			db.insert("Inventory", null, values2);
 		}
 		
 		db.close();
@@ -374,6 +383,8 @@ public class SQLiteHelper extends SQLiteOpenHelper
 			
 			player = new Player(player_id, name, coins, inventory);
 		}
+		
+		db.close();
 		
 		return player;
 	}

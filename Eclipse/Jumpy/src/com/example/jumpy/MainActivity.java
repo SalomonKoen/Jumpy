@@ -15,8 +15,6 @@ public class MainActivity extends Activity
 	protected void onStart()
 	{
 		super.onStart();
-		
-		Settings.loadSettings(getSharedPreferences("Settings", 0));
 	}
 
 	@Override
@@ -24,6 +22,18 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
+		
+		JumpyApplication app = (JumpyApplication)this.getApplication();
+		
+		SQLiteHelper helper = new SQLiteHelper(this);
+		
+		app.setHelper(helper);
+		
+		if (!Settings.loadSettings(getSharedPreferences("Settings", 0), app))
+		{
+			Intent intent = new Intent(MainActivity.this, NewProfileActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	@Override
@@ -74,5 +84,16 @@ public class MainActivity extends Activity
 	{
 		Intent intent = new Intent(MainActivity.this, StoreActivity.class);
 		startActivity(intent);
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		JumpyApplication app = (JumpyApplication)this.getApplication();
+		
+		Settings.savePlayer(getSharedPreferences("Settings", 0), app.getPlayer().getId());
+		app.closeConnection();
 	}
 }

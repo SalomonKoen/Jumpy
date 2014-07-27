@@ -9,7 +9,7 @@
         android:targetSdkVersion="19" />
 
     <application
-        android:name="JumpyApplication"
+        android:name="com.example.jumpy.JumpyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -30,6 +30,10 @@
         <activity
             android:name="com.example.jumpy.StoreActivity"
             android:label="@string/title_activity_store" >
+        </activity>
+        <activity
+            android:name="com.example.jumpy.NewProfileActivity"
+            android:label="@string/title_activity_new_profile" >
         </activity>
     </application>
 

@@ -14,8 +14,6 @@ public class StoreActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.store_menu);
 		
-		//SQLiteHelper helper = new SQLiteHelper(this);
-		
 		ArrayList<Item> items = new ArrayList<Item>();
 		items.add(new Character(1,"Blabla","adslkd dkdjdd fhfhdkdf dk", false, 50, 1, 20, 100));
 		items.add(new Weapon(1,"aDSdf","asdff fdfs sd  ds ffffffffffffffd ddddddddddkdjdd fhfhdkdf dk", true, 50, 1, 2));
@@ -26,7 +24,12 @@ public class StoreActivity extends Activity
 		items.add(new Powerup(1,"e rwwer","adslkd dkdjdd fhfhdkdf dk", true, 50, 1, 3, 200));
 		items.add(new Character(1,"E ds s","adslkd dkdjdd fhfhdkdf dk", false, 50, 1, 20, 100));
 		
-		StoreAdapter adapter = new StoreAdapter(this, items, ((JumpyApplication)this.getApplication()).getPlayer());
+		Inventory inventory = new Inventory(items);
+		Player player = ((JumpyApplication)this.getApplication()).getPlayer();
+		
+		player.setInventory(inventory);
+		
+		StoreAdapter adapter = new StoreAdapter(this, player);
 		
 		ListView listView = (ListView)findViewById(R.id.list);
 		listView.setAdapter(adapter);

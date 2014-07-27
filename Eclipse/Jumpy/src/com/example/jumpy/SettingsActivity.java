@@ -71,7 +71,7 @@ public class SettingsActivity extends Activity
 		
 		if (!Settings.isLoaded())
 		{
-			Settings.loadSettings(getSharedPreferences("Settings", 0));
+			Settings.loadSettings(getSharedPreferences("Settings", 0), (JumpyApplication)this.getApplication());
 		}
 		
 		int quality = Settings.getGraphics();
@@ -116,7 +116,7 @@ public class SettingsActivity extends Activity
 		else
 			quality = 2;
 		
-		Settings.saveSettings(getSharedPreferences("Settings", 0), seekMusic.getProgress(), seekEffects.getProgress(), quality, ((JumpyApplication)this.getApplication()).getPlayer().getId());
+		Settings.saveSettings(getSharedPreferences("Settings", 0), seekMusic.getProgress(), seekEffects.getProgress(), quality);
 		
 		finish();
 	}

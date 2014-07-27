@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,18 +15,13 @@ import android.widget.TextView;
 public class StoreAdapter extends ArrayAdapter<Item>
 {
 	private final Context context;
-	private ArrayList<Item> items = new ArrayList<Item>();
 	private Player player;
 	
-	public StoreAdapter(Context context, ArrayList<Item> items, Player player)
+	public StoreAdapter(Context context, Player player)
 	{
-		super(context, R.layout.store_item, items);
+		super(context, R.layout.store_item, player.getInventory().getItems());
 		
-		this.context = context;
-		
-		if (items != null)
-			this.items = items;
-		
+		this.context = context;		
 		this.player = player;
 	}
 	
@@ -36,7 +32,7 @@ public class StoreAdapter extends ArrayAdapter<Item>
 		
 		View rowView = inflater.inflate(R.layout.store_item, parent, false);
 		
-		Item cur = items.get(position);
+		Item cur = player.getInventory().getItems().get(position);
 		
 		ImageView image = (ImageView)rowView.findViewById(R.id.image);
 		
@@ -45,6 +41,16 @@ public class StoreAdapter extends ArrayAdapter<Item>
 		
 		TextView quantity = (TextView)rowView.findViewById(R.id.quantity);
 		Button buy = (Button)rowView.findViewById(R.id.buy);
+		
+		buy.setOnClickListener(new OnClickListener()
+		{
+			
+			@Override
+			public void onClick(View v)
+			{
+				
+			}
+		});
 		
 		name.setText(cur.getName());
 		description.setText(cur.getDescription());
