@@ -1,14 +1,16 @@
 package com.example.jumpy;
 
-public class Highscore
+public class HighScore
 {
 	private int player_id;
+	private String name;
 	private int score;
 	private int height;
 	
-	public Highscore(int player_id, int score, int height)
+	public HighScore(int player_id, String name, int score, int height)
 	{
 		this.player_id = player_id;
+		this.name = name;
 		this.score = score;
 		this.height = height;
 	}
@@ -26,6 +28,11 @@ public class Highscore
 	public int getHeight()
 	{
 		return height;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 }

@@ -5,12 +5,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends Activity
 {
+	private Intent musicService;
+	
 	@Override
 	protected void onStart()
 	{
@@ -21,7 +25,7 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main_menu);
+		setContentView(R.layout.activity_main_menu);
 		
 		JumpyApplication app = (JumpyApplication)this.getApplication();
 		
@@ -31,9 +35,41 @@ public class MainActivity extends Activity
 		
 		if (!Settings.loadSettings(getSharedPreferences("Settings", 0), app))
 		{
-			Intent intent = new Intent(MainActivity.this, NewProfileActivity.class);
-			startActivity(intent);
+			ShowAlert();
 		}
+		
+		JumpyApplication application = (JumpyApplication)getApplication();
+		application.setVolume(Settings.getMusic());
+		application.resume();
+	}
+	
+	private void ShowAlert()
+	{
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Create new Profile");
+		alert.setMessage("Enter your name:");
+		alert.setCancelable(false);
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				JumpyApplication app = (JumpyApplication)MainActivity.this.getApplication();
+				
+				SQLiteHelper helper = app.getHelper();
+				
+				String name = input.getText().toString();
+				
+				app.setPlayer(helper.addPlayer(name));
+			 }
+		});
+
+		alert.show();
 	}
 
 	@Override
@@ -66,7 +102,7 @@ public class MainActivity extends Activity
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MainActivity.this.finish();    
+                MainActivity.this.finish();
             }
 
         })
@@ -86,6 +122,18 @@ public class MainActivity extends Activity
 		startActivity(intent);
 	}
 	
+	public void onHighScoreClick(View view)
+	{
+		Intent intent = new Intent(MainActivity.this, HighScoreActivity.class);
+		startActivity(intent);
+	}
+	
+	public void onProfileClick(View view)
+	{
+		Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+		startActivity(intent);
+	}
+	
 	@Override
 	protected void onDestroy()
 	{
@@ -95,5 +143,26 @@ public class MainActivity extends Activity
 		
 		Settings.savePlayer(getSharedPreferences("Settings", 0), app.getPlayer().getId());
 		app.closeConnection();
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		if (this.isFinishing())
+		{
+			JumpyApplication application = (JumpyApplication)this.getApplication();
+			application.pause();
+		}
+		
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		JumpyApplication application = (JumpyApplication)this.getApplication();
+		application.resume();
+		
+		super.onResume();
 	}
 }

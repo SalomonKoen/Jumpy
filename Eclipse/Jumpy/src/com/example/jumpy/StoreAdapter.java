@@ -32,7 +32,7 @@ public class StoreAdapter extends ArrayAdapter<Item>
 		
 		View rowView = inflater.inflate(R.layout.store_item, parent, false);
 		
-		Item cur = player.getInventory().getItems().get(position);
+		final Item cur = player.getInventory().getItems().get(position);
 		
 		ImageView image = (ImageView)rowView.findViewById(R.id.image);
 		
@@ -40,15 +40,28 @@ public class StoreAdapter extends ArrayAdapter<Item>
 		TextView description = (TextView)rowView.findViewById(R.id.description);
 		
 		TextView quantity = (TextView)rowView.findViewById(R.id.quantity);
-		Button buy = (Button)rowView.findViewById(R.id.buy);
+		final Button buy = (Button)rowView.findViewById(R.id.buy);
+		
+		buy.setText(Integer.toString(cur.getPrice()));
 		
 		buy.setOnClickListener(new OnClickListener()
 		{
-			
 			@Override
 			public void onClick(View v)
 			{
+				player.buyItem(cur);
 				
+				if (cur.getPrice() > player.getCoins())
+				{
+					buy.setEnabled(false);
+				}
+				
+				if (!cur.isMultiple() && cur.getQuantity() == 1)
+				{
+					buy.setEnabled(false);
+				}
+				
+				notifyDataSetChanged();
 			}
 		});
 		
@@ -71,8 +84,6 @@ public class StoreAdapter extends ArrayAdapter<Item>
 		{
 			buy.setEnabled(false);
 		}
-		
-		buy.setText(Integer.toString(cur.getPrice()));
 		
 		return rowView;
 	}

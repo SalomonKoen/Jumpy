@@ -125,4 +125,25 @@ public class SettingsActivity extends Activity
 	{
 		finish();
 	}
+	
+	@Override
+	protected void onPause()
+	{
+		if (this.isFinishing())
+		{
+			JumpyApplication application = (JumpyApplication)this.getApplication();
+			application.pause();
+		}
+		
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		JumpyApplication application = (JumpyApplication)this.getApplication();
+		application.resume();
+		
+		super.onResume();
+	}
 }

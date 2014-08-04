@@ -52,4 +52,9 @@ public abstract class Item
 	{
 		return quantity;
 	}
+	
+	public void add()
+	{
+		quantity++;
+	}
 }

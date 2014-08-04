@@ -2,8 +2,6 @@ package com.example.jumpy;
 
 import java.util.ArrayList;
 
-import android.content.ClipData.Item;
-
 public class Player
 {
 	private int id;
@@ -45,4 +43,9 @@ public class Player
 		this.inventory = inventory;
 	}
 	
+	public void buyItem(Item item)
+	{
+		item.add();
+		coins -= item.getPrice();
+	}
 }

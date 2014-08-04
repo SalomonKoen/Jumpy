@@ -22,7 +22,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	public void onCreate(SQLiteDatabase db)
 	{
 		createPlayerTable(db);
-		createHighscoreTable(db);
+		createHighScoreTable(db);
 		createItemTable(db);
 		createPowerupTable(db);
 		createWeaponTable(db);
@@ -34,7 +34,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		db.execSQL("DROP TABLE IF EXISTS Highscore;");
+		db.execSQL("DROP TABLE IF EXISTS HighScore;");
 		db.execSQL("DROP TABLE IF EXISTS Player;");
 		db.execSQL("DROP TABLE IF EXISTS Powerup;");
 		db.execSQL("DROP TABLE IF EXISTS Weapon;");
@@ -50,10 +50,10 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	//CREATE TABLES
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	private void createHighscoreTable(SQLiteDatabase db)
+	private void createHighScoreTable(SQLiteDatabase db)
 	{
-		String sql = "CREATE TABLE Highscore ("
-				+ "highscore_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+		String sql = "CREATE TABLE HighScore ("
+				+ "HighScore_id INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ "player_id INTEGER REFERENCES Player(player_id), "
 				+ "score INTEGER, "
 				+ "height INTEGER);";
@@ -134,30 +134,30 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	//HIGHSCORE
+	//HighScore
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public void addHighscore(Highscore highscore)
+	public void addHighScore(HighScore HighScore)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
-		values.put("player_id", highscore.getPlayer_id());
-		values.put("score", highscore.getScore());
-		values.put("height", highscore.getHeight());
+		values.put("player_id", HighScore.getPlayer_id());
+		values.put("score", HighScore.getScore());
+		values.put("height", HighScore.getHeight());
 		
-		db.insert("Highscore", null, values);
+		db.insert("HighScore", null, values);
 		
 		db.close();
 	}
 	
-	public ArrayList<Highscore> getHeightscores(int player_id)
+	public ArrayList<HighScore> getHighScores(int player_id)
 	{
-		ArrayList<Highscore> highscores = new ArrayList<Highscore>();
+		ArrayList<HighScore> highScores = new ArrayList<HighScore>();
 		
-		String sql = "SELECT * FROM Highscore "
-				+ "WHERE player_id=" + player_id + " "
-						+ "ORDER BY score DESC, height DESC;";
+		String sql = "SELECT HighScore.player_id, Player.name, HighScore.score, HighScore.height FROM HighScore, Player "
+				+ "WHERE HighScore.player_id=Player.player_id"
+						+ " ORDER BY score DESC, height DESC;";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
@@ -165,38 +165,14 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		if (cursor.moveToFirst())
 		{
 			do {
-				Highscore highscore = new Highscore(cursor.getInt(1), cursor.getInt(2), cursor.getInt(3));
-				highscores.add(highscore);
+				HighScore highScore = new HighScore(cursor.getInt(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4));
+				highScores.add(highScore);
 			} while (cursor.moveToNext());
 		}
 		
 		db.close();
 		
-		return highscores;
-	}
-	
-	public ArrayList<Highscore> getHeightscores()
-	{
-		ArrayList<Highscore> highscores = new ArrayList<Highscore>();
-		
-		String sql = "SELECT * FROM Highscore "
-				+ "ORDER BY score DESC, height DESC;";
-		
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(sql, null);
-		
-		if (cursor.moveToFirst())
-		{
-			do
-			{
-				Highscore highscore = new Highscore(cursor.getInt(1), cursor.getInt(2), cursor.getInt(3));
-				highscores.add(highscore);
-			} while (cursor.moveToNext());
-		}
-		
-		db.close();
-		
-		return highscores;
+		return highScores;
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -299,9 +275,9 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		return new Inventory(items);
 	}
 	
-	public void saveItems(Inventory inventory, int player_id)
+	public void saveItems(Player player)
 	{
-		ArrayList<Item> items = inventory.getItems();
+		ArrayList<Item> items = player.getInventory().getItems();
 
 		SQLiteDatabase db = this.getWritableDatabase();
 		
@@ -310,7 +286,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 			String sql = "UPDATE Inventory "
 					+ "SET quantity=" + item.getQuantity() 
 					+ " WHERE item_id=" + item.getId()
-					+ " AND player_id=" + player_id;
+					+ " AND player_id=" + player.getId();
 			
 			db.execSQL(sql);
 		}
@@ -338,8 +314,6 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		String sql2 = "SELECT player_id FROM Player;";
 		int id = 1;
 		
-		db = this.getReadableDatabase();
-		
 		Cursor cursor = db.rawQuery(sql2, null);
 		
 		if (cursor.moveToLast())
@@ -360,7 +334,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		
 		db.close();
 		
-		return new Player(id, name, 0, null);
+		return new Player(id, name, 0, new Inventory(items));
 	}
 	
 	public Player getPlayer(int player_id)
@@ -387,5 +361,33 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		db.close();
 		
 		return player;
+	}
+	
+	public ArrayList<Profile> getProfiles(int player_id)
+	{
+		ArrayList<Profile> profiles = new ArrayList<Profile>();
+		
+		String sql = "SELECT * FROM Player";
+		
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		Cursor cursor = db.rawQuery(sql, null);
+		
+		if (cursor.moveToFirst())
+		{
+			do
+			{
+				boolean active = false;
+				
+				if (player_id == 0 || cursor.getInt(0) == player_id)
+					active = true;
+				
+				Profile profile = new Profile(cursor.getString(1), cursor.getInt(0), active);
+				
+				profiles.add(profile);
+			} while (cursor.moveToNext());
+		}
+		
+		return profiles;
 	}
 }
