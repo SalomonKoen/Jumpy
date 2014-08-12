@@ -85,6 +85,8 @@ public class StoreAdapter extends ArrayAdapter<Item>
 			buy.setEnabled(false);
 		}
 		
+		image.setImageResource(cur.getImage());
+		
 		return rowView;
 	}
 }

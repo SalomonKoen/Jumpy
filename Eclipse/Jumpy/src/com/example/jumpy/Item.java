@@ -7,15 +7,17 @@ public abstract class Item
 	protected String description;
 	protected boolean multiple;
 	protected int price;
+	protected int image;
 	protected int quantity;
 
-	public Item(int id, String name, String description, boolean multiple, int price, int quantity)
+	public Item(int id, String name, String description, boolean multiple, int price, int image, int quantity)
 	{
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.multiple = multiple;
 		this.price = price;
+		this.image = image;
 		
 		if (!multiple && quantity > 1)
 			this.quantity = 1;
@@ -56,5 +58,15 @@ public abstract class Item
 	public void add()
 	{
 		quantity++;
+	}
+	
+	public int getImage()
+	{
+		return image;
+	}
+	
+	public void setImage(int image)
+	{
+		this.image = image;
 	}
 }

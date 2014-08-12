@@ -5,9 +5,9 @@ public class Powerup extends Item
 	private PowerType type;
 	private int value;
 	
-	public Powerup(int id, String name, String description, boolean multiple, int price, int quantity, int type, int value)
+	public Powerup(int id, String name, String description, boolean multiple, int price, int image, int quantity, int type, int value)
 	{
-		super(id, name, description, multiple, price, quantity);
+		super(id, name, description, multiple, price, image, quantity);
 		
 		switch (type)
 		{

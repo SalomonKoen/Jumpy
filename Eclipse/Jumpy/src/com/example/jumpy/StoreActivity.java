@@ -14,20 +14,9 @@ public class StoreActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.store_menu);
 		
-		ArrayList<Item> items = new ArrayList<Item>();
-		items.add(new Character(1,"Blabla","adslkd dkdjdd fhfhdkdf dk", false, 52, 1, 20, 100));
-		items.add(new Weapon(1,"aDSdf","asdff fdfs sd  ds ffffffffffffffd ddddddddddkdjdd fhfhdkdf dk", true, 50, 1, 2));
-		items.add(new Powerup(1,"e rwwer","adslkd dkdjdd fhfhdkdf dk", true, 42, 1, 3, 200));
-		items.add(new Character(1,"E ds s","adslkd dkdjdd fhfhdkdf dk", false, 88, 1, 20, 100));
-		items.add(new Character(1,"Blabla","adslkd dkdjdd fhfhdkdf dk", false, 7, 1, 20, 100));
-		items.add(new Weapon(1,"aDSdf","asdff fdfs sd  ds ffffffffffffffd ddddddddddkdjdd fhfhdkdf dk", true, 50, 1, 2));
-		items.add(new Powerup(1,"e rwwer","adslkd dkdjdd fhfhdkdf dk", true, 3, 1, 3, 200));
-		items.add(new Character(1,"E ds s","adslkd dkdjdd fhfhdkdf dk", false, 21, 1, 20, 100));
+		JumpyApplication application = (JumpyApplication)getApplication();
 		
-		Inventory inventory = new Inventory(items);
-		Player player = ((JumpyApplication)this.getApplication()).getPlayer();
-		
-		player.setInventory(inventory);
+		Player player = application.getPlayer();
 		
 		StoreAdapter adapter = new StoreAdapter(this, player);
 		
@@ -36,22 +25,16 @@ public class StoreActivity extends Activity
 	}
 	
 	@Override
-	protected void onDestroy()
-	{
-		JumpyApplication application = (JumpyApplication)this.getApplication();
-		application.getHelper().saveItems(application.getPlayer());
-		
-		super.onDestroy();
-	}
-	
-	@Override
 	protected void onPause()
 	{
+		JumpyApplication application = (JumpyApplication)this.getApplication();
+		
 		if (!this.isFinishing())
 		{
-			JumpyApplication application = (JumpyApplication)this.getApplication();
 			application.pause();
 		}
+		
+		application.getHelper().saveItems(application.getPlayer());
 		
 		super.onPause();
 	}

@@ -78,10 +78,26 @@ public class SQLiteHelper extends SQLiteOpenHelper
 				+ "name TEXT, "
 				+ "description TEXT, "
 				+ "price INTEGER, "
+				+ "image INTEGER, "
 				+ "type INTEGER CONSTRAINT check_type CHECK (type IN (0, 1, 2)), "
-				+ "multiple BOOLEAN);";
+				+ "multiple BOOLEAN);";		
 		
 		db.execSQL(sql);
+		
+		String[] items = {
+				"null, 'Jumping Boots', 'Makes you jump 50% higher', 10, " + R.drawable.item_1 + ", 1, 1",
+				"null, 'Jumping Boots', 'Makes you jump 50% higher', 10, " + R.drawable.item_2 + ", 1, 1",
+				"null, 'Jumping Boots', 'Makes you jump 50% higher', 10, " + R.drawable.item_3 + ", 1, 1",
+				"null, 'Jumping Boots', 'Makes you jump 50% higher', 10, " + R.drawable.item_4 + ", 1, 1",
+				"null, 'Jumping Boots', 'Makes you jump 50% higher', 10, " + R.drawable.item_5 + ", 1, 1",
+				"null, 'Jumping Boots', 'Makes you jump 50% higher', 10, " + R.drawable.item_6 + ", 1, 1",
+		};
+		
+		for (String s : items)
+		{
+			String itemSql = "INSERT INTO Item VALUES (" + s + ");";
+			db.execSQL(itemSql);
+		}
 	}
 	
 	private void createCharacterTable(SQLiteDatabase db)
@@ -102,6 +118,21 @@ public class SQLiteHelper extends SQLiteOpenHelper
 				+ "value INTEGER);";
 		
 		db.execSQL(sql);
+		
+		String[] items = { 
+				"1, 10, 5",
+				"2, 10, 5",
+				"3, 10, 5",
+				"4, 10, 5",
+				"5, 10, 5",
+				"6, 10, 5"
+		};
+		
+		for (String s : items)
+		{
+			String itemSql = "INSERT INTO Powerup VALUES (" + s + ");";
+			db.execSQL(itemSql);
+		}
 	}
 	
 	private void createWeaponTable(SQLiteDatabase db)
@@ -195,11 +226,12 @@ public class SQLiteHelper extends SQLiteOpenHelper
 				Item item = null;
 				
 				int id = cursor.getInt(0);
-				int type = cursor.getInt(4);
+				int type = cursor.getInt(5);
 				String name = cursor.getString(1);
 				String description = cursor.getString(2);
 				int price = cursor.getInt(3);
-				boolean multiple = cursor.getInt(5) > 0;
+				int image = cursor.getInt(4);
+				boolean multiple = cursor.getInt(6) > 0;
 				
 				int quantity = 0;
 				
@@ -212,7 +244,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 					
 					if (cursor2.moveToFirst())
 					{
-						item = new Character(id, name, description, multiple, price, quantity, cursor2.getInt(1), cursor2.getInt(2));
+						item = new Character(id, name, description, multiple, price, image, quantity, cursor2.getInt(1), cursor2.getInt(2));
 					}
 				}
 				else if (type == 1)
@@ -224,7 +256,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 					
 					if (cursor2.moveToFirst())
 					{
-						item = new Powerup(id, name, description, multiple, price, quantity, cursor2.getInt(1), cursor2.getInt(2));
+						item = new Powerup(id, name, description, multiple, price, image, quantity, cursor2.getInt(1), cursor2.getInt(2));
 					}
 				}
 				else if (type == 2)
@@ -236,7 +268,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 					
 					if (cursor2.moveToFirst())
 					{
-						item = new Weapon(id, name, description, multiple, price, quantity, cursor2.getInt(1));
+						item = new Weapon(id, name, description, multiple, price, image,  quantity, cursor2.getInt(1));
 					}
 				}
 				
@@ -314,6 +346,8 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		String sql2 = "SELECT player_id FROM Player;";
 		int id = 1;
 		
+		db = this.getReadableDatabase();
+		
 		Cursor cursor = db.rawQuery(sql2, null);
 		
 		if (cursor.moveToLast())
@@ -323,18 +357,17 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		
 		for (Item item : items)
 		{
-			ContentValues values2 = new ContentValues();
+			String sql3 = "INSERT INTO Inventory VALUES (" 
+					+ id + ", "
+					+ item.getId() + ", "
+					+ "0);";
 			
-			values2.put("item_id", item.getId());
-			values2.put("player_id", id);
-			values2.put("quantity", 0);
-			
-			db.insert("Inventory", null, values2);
+			db.execSQL(sql3);
 		}
 		
 		db.close();
 		
-		return new Player(id, name, 0, new Inventory(items));
+		return new Player(id, name, 100, new Inventory(items));
 	}
 	
 	public Player getPlayer(int player_id)
