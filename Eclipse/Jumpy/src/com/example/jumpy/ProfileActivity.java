@@ -114,6 +114,7 @@ public class ProfileActivity extends Activity
 			@Override
 			public void onClick(View v) {
 				JumpyApplication application = (JumpyApplication)getApplication();
+				application.getHelper().savePlayer(application.getPlayer());
 				application.setPlayer(selected);
 				adapter.setActive(selected);
 			}

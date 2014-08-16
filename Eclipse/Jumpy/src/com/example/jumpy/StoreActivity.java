@@ -34,8 +34,6 @@ public class StoreActivity extends Activity
 			application.pause();
 		}
 		
-		application.getHelper().saveItems(application.getPlayer());
-		
 		super.onPause();
 	}
 	

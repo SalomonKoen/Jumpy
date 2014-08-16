@@ -7,10 +7,30 @@ public class PlayerScript : MonoBehaviour {
     public float damp = 20;
 
     private bool jump = true;
+	
+	public GameObject bullet;
+
+	public float fireRate = 0.2f;
+	private float nextFire = 0.0F;
 
     void Start()
     {
+
     }
+
+	void Update()
+	{
+		if (Input.touchCount > 0 && Time.time > nextFire)
+		{
+			nextFire = Time.time + fireRate;
+			Vector2 direction = (Input.GetTouch(0).position - new Vector2(Screen.width / 2, 0)).normalized;
+			
+			GameObject obj = (GameObject)Instantiate(bullet, new Vector2(transform.position.x, transform.position.y + renderer.bounds.size.y - bullet.renderer.bounds.size.y), Quaternion.identity);
+			BulletScript script = obj.GetComponent<BulletScript>();
+			script.direction = direction;
+			script.Move();
+		}
+	}
 
     void FixedUpdate()
     {

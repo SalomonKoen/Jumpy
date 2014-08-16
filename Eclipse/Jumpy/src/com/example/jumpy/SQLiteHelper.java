@@ -28,7 +28,6 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		createWeaponTable(db);
 		createCharacterTable(db);
 		createInventoryTable(db);
-		createEnemyTable(db);
 	}
 
 	@Override
@@ -41,7 +40,6 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		db.execSQL("DROP TABLE IF EXISTS Character;");
 		db.execSQL("DROP TABLE IF EXISTS Item;");
 		db.execSQL("DROP TABLE IF EXISTS Inventory;");
-		db.execSQL("DROP TABLE IF EXISTS Enemy;");
 		
 		this.onCreate(db);
 	}
@@ -151,15 +149,6 @@ public class SQLiteHelper extends SQLiteOpenHelper
 				+ "item_id INTEGER REFERENCES Item(item_id), "
 				+ "quantity INTEGER, "
 				+ "PRIMARY KEY (player_id, item_id));";
-		
-		db.execSQL(sql);
-	}
-	
-	private void createEnemyTable(SQLiteDatabase db)
-	{
-		String sql = "CREATE TABLE Enemy ("
-				+ "enemy_id INTEGER PRIMARY KEY, "
-				+ "health INTEGER);";
 		
 		db.execSQL(sql);
 	}
@@ -300,6 +289,8 @@ public class SQLiteHelper extends SQLiteOpenHelper
 			{
 				quantity = cursor.getInt(2);
 			}
+			
+			item.setQuantity(quantity);
 		}
 		
 		db.close();
@@ -395,6 +386,25 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		
 		return player;
 	}
+	
+	public void savePlayer(Player player)
+	{
+		saveItems(player);
+		
+		String sql = "UPDATE Player " +
+				"SET coins = " + player.getCoins();
+		
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		db.execSQL(sql);
+		
+		db.close();
+	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//PLAYER
+	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
 	
 	public ArrayList<Profile> getProfiles(int player_id)
 	{

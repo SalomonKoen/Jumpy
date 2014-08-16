@@ -141,6 +141,8 @@ public class MainActivity extends Activity
 		
 		JumpyApplication app = (JumpyApplication)this.getApplication();
 		
+		app.getHelper().savePlayer(app.getPlayer());
+		
 		Settings.savePlayer(getSharedPreferences("Settings", 0), app.getPlayer().getId());
 		app.closeConnection();
 	}
