@@ -1,7 +1,5 @@
 package com.example.jumpy;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

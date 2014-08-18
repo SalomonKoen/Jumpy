@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +56,7 @@ public class MainActivity extends Activity
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				JumpyApplication app = (JumpyApplication)MainActivity.this.getApplication();
@@ -108,6 +108,12 @@ public class MainActivity extends Activity
         })
         .setNegativeButton("No", null)
         .show();
+	}
+	
+	public void onPlayClick(View view)
+	{
+		Intent intent = new Intent(MainActivity.this, GameActivity.class);
+		startActivity(intent);
 	}
 	
 	public void onSettingsClick(View view)

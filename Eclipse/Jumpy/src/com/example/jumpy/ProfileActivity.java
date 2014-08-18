@@ -32,6 +32,7 @@ public class ProfileActivity extends Activity
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() 
 		{
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				JumpyApplication app = (JumpyApplication)ProfileActivity.this.getApplication();
@@ -53,7 +54,8 @@ public class ProfileActivity extends Activity
 
 		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
 		{
-		  public void onClick(DialogInterface dialog, int whichButton)
+		  @Override
+		public void onClick(DialogInterface dialog, int whichButton)
 		  {
 
 		  }
@@ -86,6 +88,7 @@ public class ProfileActivity extends Activity
 		
 		newProfile.setOnClickListener(new OnClickListener() {
 
+			@Override
 			public void onClick(View v) {
 				ShowAlert();
 			}

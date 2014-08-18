@@ -1,7 +1,5 @@
 package com.example.jumpy;
 
-import java.util.ArrayList;
-
 public class Player
 {
 	private int id;

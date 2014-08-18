@@ -1,7 +1,6 @@
 package com.example.jumpy;
 
 import android.app.Application;
-import android.content.Intent;
 import android.media.MediaPlayer;
 
 public class JumpyApplication extends Application
