@@ -17,6 +17,11 @@ public class ScrollingScript : MonoBehaviour
     private Vector2 firstPos = Vector2.zero;
 
     public static bool paused = false;
+	public bool fillScreen = false; 
+
+	public float margin = 0f;
+	public bool alignLeft = false;
+	public bool alignRight = false;
 
 	private List<Transform> backgroundPart;
 
@@ -26,34 +31,102 @@ public class ScrollingScript : MonoBehaviour
 		{
 			backgroundPart = new List<Transform>();
 
+			float pos = 0;
+			float screenWidth = Camera.main.ScreenToWorldPoint(new Vector2(Camera.main.pixelWidth, 0)).x*2;
+			float screenHeight = Camera.main.ScreenToWorldPoint(new Vector2(0, Camera.main.pixelHeight)).y;
+			Vector3 dirNorm = direction.normalized;
+
 			for (int i = 0 ; i < transform.childCount; i++)
 			{
 				Transform child = transform.GetChild(i);
+
+				float width = child.renderer.bounds.size.x;
+				float height = child.renderer.bounds.size.y;
 
 				if (child.renderer != null)
 				{
 					backgroundPart.Add(child);
 				}
 
-                Vector3 dirNorm = direction.normalized;
-
                 if (dirNorm.x == 1)
                 {
+					float scale = screenHeight/height;
+					
+					if (fillScreen)
+					{
+						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
+					}
+
                     backgroundPart = backgroundPart.OrderByDescending(t => t.position.x).ToList();
+					pos += width*scale + 1;
                 }
                 else if (dirNorm.x == -1)
                 {
+					float scale = screenHeight/height;
+					
+					if (fillScreen)
+					{
+						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
+					}
+
                     backgroundPart = backgroundPart.OrderBy(t => t.position.x).ToList();
+					pos += width*scale + 1;
                 }
                 else if (dirNorm.y == 1)
                 {
-                    backgroundPart = backgroundPart.OrderByDescending(t => t.position.y).ToList();
-                }
-                else if (dirNorm.x == -1)
-                {
-                    backgroundPart = backgroundPart.OrderBy(t => t.position.y).ToList();
-                }
+					float scale = screenWidth/width;
+					
+					if (fillScreen)
+					{
+						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
+					}
 
+					backgroundPart = backgroundPart.OrderByDescending(t => t.position.x).ToList();
+					pos += height*scale + 1;
+                }
+                else if (dirNorm.y == -1)
+                {
+					float scale = screenWidth/width;
+
+					if (fillScreen)
+					{
+						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
+						child.position = new Vector3(0, height*scale/2 + pos, child.position.z);
+						pos += height*scale;
+					}
+					else
+					{
+						if (alignLeft)
+						{
+							child.position = new Vector3(-screenWidth/2 + width/2 - margin, height/2 + pos, child.position.z);
+						}
+						else if (alignRight)
+						{
+							child.position = new Vector3(screenWidth/2 - width/2 + margin, height/2 + pos, child.position.z);
+						}
+						else
+							child.position = new Vector3(child.position.x, height/2 + pos, child.position.z);
+
+						pos += height;
+					}
+                }
+			}
+
+			if (dirNorm.y == -1)
+			{
+				while (pos < 2*screenHeight)
+				{
+					Transform last = backgroundPart.Last<Transform>();
+					Transform t = (Transform)Instantiate(last, new Vector3(0, 0), Quaternion.identity);
+					float height = t.renderer.bounds.size.y;
+					t.position = new Vector3(0, height/2 + pos, last.position.z);
+					t.parent = transform;
+					pos += height;
+
+					backgroundPart.Add(t);
+				}
+
+				backgroundPart = backgroundPart.OrderByDescending(t => t.position.x).ToList();
 			}
 		}
 	}
@@ -64,7 +137,7 @@ public class ScrollingScript : MonoBehaviour
         {
             if (!isLinkedToCamera)
             {
-                Vector3 movement = new Vector3(speed.x * direction.x, speed.y * direction.y, 0);
+				Vector3 movement = new Vector3(speed.x * direction.x * speedMultiplier, speed.y * direction.y * speedMultiplier, 0);
                 movement *= Time.deltaTime;
 
                 transform.Translate(movement);
