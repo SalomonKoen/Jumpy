@@ -7,13 +7,63 @@ public class PlayerScript : MonoBehaviour {
     public float damp = 20;
 
     private bool jump = true;
+	
+	public GameObject bullet;
+
+	public float fireRate = 0.2f;
+	private float nextFire = 0.0F;
 
     void Start()
     {
+		transform.position =  new Vector2(0, renderer.bounds.size.y/2);
     }
+
+	void Update()
+	{
+		if (Input.touchCount > 0 && Time.time > nextFire)
+		{
+			nextFire = Time.time + fireRate;
+			Vector2 direction = (Input.GetTouch(0).position - new Vector2(Screen.width / 2, 0)).normalized;
+			
+			GameObject obj = (GameObject)Instantiate(bullet, new Vector2(transform.position.x, transform.position.y + renderer.bounds.size.y - bullet.renderer.bounds.size.y), Quaternion.identity);
+			BulletScript script = obj.GetComponent<BulletScript>();
+			script.setDirection(direction);
+			script.Move();
+		}
+
+		if (Application.platform != RuntimePlatform.Android)
+		{
+			if (Input.GetButtonDown("Fire1"))
+			{
+				nextFire = Time.time + fireRate;
+				Vector3 direction = (Input.mousePosition - new Vector3(Screen.width / 2, 0)).normalized;
+				
+				GameObject obj = (GameObject)Instantiate(bullet, new Vector2(transform.position.x, transform.position.y + renderer.bounds.size.y - bullet.renderer.bounds.size.y), Quaternion.identity);
+				BulletScript script = obj.GetComponent<BulletScript>();
+				script.setDirection(direction);
+				script.Move();
+			}
+		}
+	}
 
     void FixedUpdate()
     {
+		if (Application.platform != RuntimePlatform.Android)
+		{
+			if (Input.GetKey (KeyCode.LeftArrow))
+			{
+				rigidbody2D.velocity = new Vector2(-4, rigidbody2D.velocity.y);
+			}
+			else if (Input.GetKey (KeyCode.RightArrow))
+			{
+				rigidbody2D.velocity = new Vector2(4, rigidbody2D.velocity.y);
+			}
+			else
+			{
+				rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
+			}
+		}
+
         float x = Input.acceleration.x;
 
         transform.position = new Vector3(Mathf.Lerp(transform.position.x, transform.position.x + x, Time.deltaTime * damp), transform.position.y, -1);
@@ -29,36 +79,33 @@ public class PlayerScript : MonoBehaviour {
         {
             gameObject.layer = 9;
         }
+
+		float width = Camera.main.ScreenToWorldPoint(new Vector2(Camera.main.pixelWidth,0)).x;
+		
+		if (transform.position.x < -width)
+		{
+			transform.position = new Vector2(width, transform.position.y);
+		}
+		else if (transform.position.x > width)
+		{
+			transform.position = new Vector2(-width, transform.position.y);
+		}
+
+		if (transform.position.y < 0)
+		{
+			Time.timeScale = 0;
+		}
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        jump = true;
+		if (collision.gameObject.tag == "platform")
+		{
+        	jump = true;
+		}
+		else if (collision.gameObject.tag == "enemy")
+		{
+			Destroy(this);
+		}
     }
-
-    /*public Vector2 speed = new Vector2(50, 50);
-
-    private Vector2 movement;
-	
-    void Update()
-    {
-        float inputX = Input.GetAxis("Horizontal");
-        float inputY = Input.GetAxis("Vertical");
-
-        movement = new Vector2(speed.x * inputX, speed.y * inputY);
-
-		var dist = (transform.position - Camera.main.transform.position).z;
-		var leftBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).x;
-		var rightBorder = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, dist)).x;
-		var topBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, dist)).y;
-		var bottomBorder = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, dist)).y;
-
-		transform.position = new Vector3(Mathf.Clamp(transform.position.x, leftBorder + 1.1f, rightBorder - 1.1f),Mathf.Clamp(transform.position.y, topBorder + 1.1f, bottomBorder - 1.1f),transform.position.z);
-        
-    }
-
-    void FixedUpdate()
-    {
-        rigidbody2D.velocity = movement;
-    }*/
 }

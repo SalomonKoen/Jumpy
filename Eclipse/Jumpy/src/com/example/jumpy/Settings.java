@@ -8,16 +8,29 @@ public class Settings
 	private static int music = 100;
 	private static int effects = 100;
 	private static int graphics = 1;
+	private static int player_id = 0;
 	
 	private static boolean loaded = false;
 
-	public static void loadSettings(SharedPreferences preferences)
+	public static boolean loadSettings(SharedPreferences preferences, JumpyApplication app)
 	{
 		music = preferences.getInt("musicVolume", music);
 		effects = preferences.getInt("effectsVolume", effects);
 		graphics = preferences.getInt("graphicsQuality", graphics);
+		player_id = preferences.getInt("playerID", player_id);
+		
+		SQLiteHelper helper = app.getHelper();
+		
+		if (player_id != 0)
+			app.setPlayer(helper.getPlayer(player_id));
+		else
+		{
+			return false;
+		}
 
 		loaded = true;
+		
+		return true;
 	}
 
 	public static int getGraphics()
@@ -51,6 +64,15 @@ public class Settings
 		editor.putInt("musicVolume", music);
 		editor.putInt("effectsVolume", effects);
 		editor.putInt("graphicsQuality", graphics);
+		
+		editor.commit();
+	}
+	
+	public static void savePlayer(SharedPreferences preferences, int player_id)
+	{
+		Editor editor = preferences.edit();
+		
+		editor.putInt("playerID", player_id);
 		
 		editor.commit();
 	}

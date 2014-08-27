@@ -1,0 +1,18 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\EnemyScript.cs">
+    <Files>
+      <File FileName="Assets\Scripts\GameGenerator.cs" Line="43" Column="3" />
+      <File FileName="Assets\Scripts\ScrollingScript.cs" Line="11" Column="48" />
+      <File FileName="Assets\Scripts\EnemyScript.cs" Line="15" Column="62" />
+      <File FileName="Assets\Scripts\BulletScript.cs" Line="26" Column="3" />
+      <File FileName="Assets\Scripts\PlayerScript.cs" Line="39" Column="59" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets\Scripts\ScrollingScript.cs" line="180" offsetX="669" offsetY="3043" expression="lastChild" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+</Properties>

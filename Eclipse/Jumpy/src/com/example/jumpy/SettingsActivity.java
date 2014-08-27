@@ -71,7 +71,7 @@ public class SettingsActivity extends Activity
 		
 		if (!Settings.isLoaded())
 		{
-			Settings.loadSettings(getSharedPreferences("Settings", 0));
+			Settings.loadSettings(getSharedPreferences("Settings", 0), (JumpyApplication)this.getApplication());
 		}
 		
 		int quality = Settings.getGraphics();
@@ -124,5 +124,26 @@ public class SettingsActivity extends Activity
 	public void onCancelClick(View view)
 	{
 		finish();
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		if (this.isFinishing())
+		{
+			JumpyApplication application = (JumpyApplication)this.getApplication();
+			application.pause();
+		}
+		
+		super.onPause();
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		JumpyApplication application = (JumpyApplication)this.getApplication();
+		application.resume();
+		
+		super.onResume();
 	}
 }
