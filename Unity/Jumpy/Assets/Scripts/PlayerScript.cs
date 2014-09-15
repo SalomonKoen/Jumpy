@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
+	public static bool Pause = false;
 
     public float jumpForce = 7f;
     public float damp = 20;
@@ -20,6 +21,14 @@ public class PlayerScript : MonoBehaviour {
 
 	void Update()
 	{
+		if (Pause)
+		{
+			rigidbody2D.Sleep();
+			return;
+		}
+		else if (!Pause && rigidbody2D.IsSleeping())
+			rigidbody2D.WakeUp();
+
 		if (Input.touchCount > 0 && Time.time > nextFire)
 		{
 			nextFire = Time.time + fireRate;
@@ -48,6 +57,9 @@ public class PlayerScript : MonoBehaviour {
 
     void FixedUpdate()
     {
+		if (Pause)
+			return;
+
 		if (Application.platform != RuntimePlatform.Android)
 		{
 			if (Input.GetKey (KeyCode.LeftArrow))
@@ -70,7 +82,7 @@ public class PlayerScript : MonoBehaviour {
 
         if (jump)
         {
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
+			rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
             gameObject.layer = 8;
             jump = false;
         }
