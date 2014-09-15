@@ -18,17 +18,18 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f050000;
-        public static final int activity_vertical_margin=0x7f050001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int item_1=0x7f020001;
-        public static final int item_2=0x7f020002;
-        public static final int item_3=0x7f020003;
-        public static final int item_4=0x7f020004;
-        public static final int item_5=0x7f020005;
-        public static final int item_6=0x7f020006;
+        public static final int app_icon=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int item_1=0x7f020002;
+        public static final int item_2=0x7f020003;
+        public static final int item_3=0x7f020004;
+        public static final int item_4=0x7f020005;
+        public static final int item_5=0x7f020006;
+        public static final int item_6=0x7f020007;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f090005;
@@ -81,13 +82,13 @@ public final class R {
         public static final int background_music=0x7f040000;
     }
     public static final class string {
-        public static final int action_settings=0x7f060002;
-        public static final int app_name=0x7f060000;
-        public static final int hello_world=0x7f060001;
-        public static final int title_activity_high_score=0x7f060005;
-        public static final int title_activity_new_profile=0x7f060004;
-        public static final int title_activity_profile=0x7f060006;
-        public static final int title_activity_store=0x7f060003;
+        public static final int action_settings=0x7f050002;
+        public static final int app_name=0x7f050000;
+        public static final int hello_world=0x7f050001;
+        public static final int title_activity_high_score=0x7f050005;
+        public static final int title_activity_new_profile=0x7f050004;
+        public static final int title_activity_profile=0x7f050006;
+        public static final int title_activity_store=0x7f050003;
     }
     public static final class style {
         /** 
