@@ -18,14 +18,6 @@ public class EnemyScript : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter2D(Collision2D collision)
-	{
-		if (collision.gameObject.tag == "player")
-		{
-			Destroy(this.transform.parent.gameObject);
-		}
-	}
-
 	public void Damage(int damage)
 	{
 		health -= damage;
@@ -33,6 +25,14 @@ public class EnemyScript : MonoBehaviour
 		if (health <= 0)
 		{
 			Destroy (this.transform.parent.gameObject);
+		}
+	}
+
+	void OnCollisionEnter2D(Collision2D collision)
+	{
+		if (collision.gameObject.tag == "enemy")
+		{
+			Destroy (this);
 		}
 	}
 }

@@ -63,7 +63,7 @@ public class GameGenerator : MonoBehaviour
 
             maxObj = (GameObject)Instantiate(curPlatform, new Vector3(Random.Range(-size.x + curPlatform.renderer.bounds.size.x / 2, size.x - curPlatform.renderer.bounds.size.x / 2), curPoint), Quaternion.identity);
         	
-			if (Random.Range(0f, 1f) < 0.05f)
+			if (Random.Range(0f, 1f) < 0.1f)
 			{
 				GameObject enemy = enemies[Random.Range(0, enemies.Count)];
 				Transform enemyChild = enemy.transform.GetChild(0);
