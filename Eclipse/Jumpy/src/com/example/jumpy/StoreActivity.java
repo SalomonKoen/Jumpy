@@ -10,7 +10,7 @@ public class StoreActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.store_menu);
+		setContentView(R.layout.activity_store);
 		
 		JumpyApplication application = (JumpyApplication)getApplication();
 		

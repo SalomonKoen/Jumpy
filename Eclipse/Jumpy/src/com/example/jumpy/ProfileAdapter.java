@@ -16,7 +16,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
 
 	public ProfileAdapter(Context context, List<Profile> profiles)
 	{
-		super(context, R.layout.score_layout,profiles);
+		super(context, R.layout.item_high_score,profiles);
 		this.context = context;
 		this.profiles = profiles;
 	}
@@ -29,7 +29,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		// create a view to display the person's info
-		View profileView = inflater.inflate(R.layout.profile_layout, parent, false);
+		View profileView = inflater.inflate(R.layout.activity_profiles, parent, false);
 		
 		// keep track of person this view is working with
 		profileView.setTag(profiles.get(position));

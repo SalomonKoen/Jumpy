@@ -16,7 +16,7 @@ public class HighScoreAdapter extends ArrayAdapter<HighScore>
 
 	public HighScoreAdapter(Context context, List<HighScore> score)
 	{
-		super(context, R.layout.score_layout,score);
+		super(context, R.layout.item_high_score,score);
 		this.context = context;
 		this.scores = score;
 	}
@@ -25,25 +25,26 @@ public class HighScoreAdapter extends ArrayAdapter<HighScore>
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// get the inflater that will convert the person_layout.xml file into an
 		// actual object (i.e. inflate it)
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		// create a view to display the person's info
-		View scoreView = inflater.inflate(R.layout.score_layout, parent, false);
+		if (convertView == null)
+		{
+			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = inflater.inflate(R.layout.item_high_score, parent, false);
+		}
 		
 		// keep track of person this view is working with
-		scoreView.setTag(scores.get(position));
+		convertView.setTag(scores.get(position));
 		
 		// get text views that will hold strings
-		TextView txtName = (TextView) scoreView.findViewById(R.id.tvName);
-		TextView txtScore = (TextView) scoreView.findViewById(R.id.tvScore);
+		TextView txtName = (TextView) convertView.findViewById(R.id.tvName);
+		TextView txtHeight = (TextView) convertView.findViewById(R.id.tvHeight);
 		
 		// set text fields
 		txtName.setText(scores.get(position).getName());
-		txtScore.setText(String.valueOf(scores.get(position).getScore()));
+		txtHeight.setText(String.valueOf(scores.get(position).getHeight()));
 		
 		// return view to ListView to display
-		return scoreView;
+		return convertView;
 	}
 
 

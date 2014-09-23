@@ -19,7 +19,7 @@ public class SettingsActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.settings_menu);
+		setContentView(R.layout.activity_settings);
 		
 		rgGraphics = (RadioGroup)findViewById(R.id.rgGraphics);		
 		seekMusic =  (SeekBar)findViewById(R.id.seekMusic);

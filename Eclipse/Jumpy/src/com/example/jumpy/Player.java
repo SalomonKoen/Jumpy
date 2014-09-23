@@ -1,5 +1,7 @@
 package com.example.jumpy;
 
+import java.util.ArrayList;
+
 public class Player
 {
 	private int id;
@@ -45,5 +47,20 @@ public class Player
 	{
 		item.add();
 		coins -= item.getPrice();
+	}
+
+	public ArrayList<Powerup> getPowerups()
+	{
+		ArrayList<Powerup> powerups = new ArrayList<Powerup>();
+		
+		for (Item item : inventory)
+		{
+			if (item instanceof Powerup)
+			{
+				powerups.add((Powerup)item);
+			}
+		}
+		
+		return powerups; 
 	}
 }

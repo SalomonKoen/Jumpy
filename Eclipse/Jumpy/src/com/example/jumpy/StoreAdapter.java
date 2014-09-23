@@ -17,7 +17,7 @@ public class StoreAdapter extends ArrayAdapter<Item>
 	
 	public StoreAdapter(Context context, Player player)
 	{
-		super(context, R.layout.store_item, player.getInventory().getItems());
+		super(context, R.layout.item_store, player.getInventory().getItems());
 		
 		this.context = context;		
 		this.player = player;
@@ -28,7 +28,7 @@ public class StoreAdapter extends ArrayAdapter<Item>
 	{
 		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		View rowView = inflater.inflate(R.layout.store_item, parent, false);
+		View rowView = inflater.inflate(R.layout.item_store, parent, false);
 		
 		final Item cur = player.getInventory().getItems().get(position);
 		

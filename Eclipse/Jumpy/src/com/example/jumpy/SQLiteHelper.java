@@ -53,7 +53,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
 		String sql = "CREATE TABLE HighScore ("
 				+ "HighScore_id INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ "player_id INTEGER REFERENCES Player(player_id), "
-				+ "score INTEGER, "
+				+ "kills INTEGER, "
 				+ "height INTEGER);";
 		
 		db.execSQL(sql);
@@ -157,14 +157,14 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	//HighScore
 	//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
-	public void addHighScore(HighScore HighScore)
+	public void addHighScore(HighScore highScore)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
-		values.put("player_id", HighScore.getPlayer_id());
-		values.put("score", HighScore.getScore());
-		values.put("height", HighScore.getHeight());
+		values.put("player_id", highScore.getPlayer_id());
+		values.put("kills", highScore.getKills());
+		values.put("height", highScore.getHeight());
 		
 		db.insert("HighScore", null, values);
 		

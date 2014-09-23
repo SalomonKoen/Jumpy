@@ -17,15 +17,11 @@ public class HighScoreActivity extends Activity
 
 		ListView highscores = (ListView)findViewById(R.id.lvHighScores);
 		
-		final List<HighScore> items = new ArrayList<HighScore>();
-		items.add(new HighScore(1, "John", 14, 20));
-		items.add(new HighScore(2, "Jane", 16, 30));
-		items.add(new HighScore(3, "Solly", 18, 10));
-
-		// create adapter to transform string items
-		final HighScoreAdapter adapter = new HighScoreAdapter(this, items);
+		JumpyApplication application = (JumpyApplication)getApplication();
 		
-		// attach adapter to list view
+		List<HighScore> items = application.getHelper().getHighScores(application.getPlayer().getId());
+
+		HighScoreAdapter adapter = new HighScoreAdapter(this, items);
 		highscores.setAdapter(adapter);
 
 	}

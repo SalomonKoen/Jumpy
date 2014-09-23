@@ -14,15 +14,10 @@ public class PlayerScript : MonoBehaviour {
 	private float nextFire = 0.0F;
 
 	private bool move = true;
-
-	private BoxCollider2D box;
-	private float boxWidth;
-
+	
     void Start()
     {
 		transform.position =  new Vector2(0, renderer.bounds.size.y/2);
-		box = this.GetComponent<BoxCollider2D>();
-		boxWidth = box.size.x*transform.localScale.x;
     }
 
 	void Update()
@@ -84,12 +79,14 @@ public class PlayerScript : MonoBehaviour {
 	        {
 	            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
 	            gameObject.layer = 8;
+				transform.GetChild(1).gameObject.layer = 8;
 	            jump = false;
 	        }
 
 	        if (rigidbody2D.velocity.y <= 0)
 	        {
 	            gameObject.layer = 9;
+				transform.GetChild(1).gameObject.layer = 9;
 	        }
 
 			float width = Camera.main.ScreenToWorldPoint(new Vector2(Camera.main.pixelWidth,0)).x;
@@ -105,39 +102,33 @@ public class PlayerScript : MonoBehaviour {
 
 			if (transform.position.y < 0)
 			{
+				sendData();
+
 				Time.timeScale = 0;
 			}
 		}
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-		if (move)
-		{
-			if (collision.gameObject.tag == "platform")
-			{
-	        	jump = true;
-			}
-			else if (collision.gameObject.tag == "enemy")
-			{
-				Transform enemy = collision.gameObject.transform;
-				BoxCollider2D collider = collision.gameObject.GetComponent<BoxCollider2D>();
+	public void setJump(bool jump)
+	{
+		this.jump = jump;
+	}
 
-				float width = collider.size.x*enemy.localScale.x;
-				float height = collider.size.y*enemy.localScale.y;
+	public void setMove(bool move)
+	{
+		this.move = move;
+	}
+    
+	public bool isMoving()
+	{
+		return move;
+	}
 
-				if (transform.position.x + boxWidth/2 < enemy.position.x + width/2 && transform.position.x - boxWidth/2 > enemy.position.x - width/2 && transform.position.y >= enemy.position.y + height/2)
-				{
-					jump = true;
-					Destroy(collision.gameObject);
-				}
-				else
-				{
-					move = false;
-					gameObject.layer = 12;
-					Destroy(collision.gameObject);
-				}
-			}
-		}
+	private void sendData()
+	{
+		AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
+		AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+		
+		activity.Call("setHighScore", ScrollingScript.getHeight(), PlayerCollisionScript.getKills());
     }
 }

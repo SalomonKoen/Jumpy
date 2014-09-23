@@ -7,6 +7,8 @@ public class ScrollingScript : MonoBehaviour
 {
 	public static Vector2 speed = new Vector2(0, 0);
 
+	private static float height = 0;
+
     public float speedMultiplier = 1f;
 	public Vector2 direction = new Vector2(0, -1);
 
@@ -153,6 +155,8 @@ public class ScrollingScript : MonoBehaviour
                 speed = new Vector2(0, rigidbody2D.velocity.y);
 
                 transform.position = new Vector3(transform.position.x, firstPos.y, transform.position.z);
+
+				height += 0.1f;
 		    }
             else if (isLinkedToCamera && rigidbody2D.velocity.y <= 0)
             {
@@ -199,6 +203,11 @@ public class ScrollingScript : MonoBehaviour
                 }
             }
 		}
+	}
+
+	public static int getHeight()
+	{
+		return (int)height;
 	}
 
     private void Loop(Transform firstChild, Vector3 pos)
