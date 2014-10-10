@@ -3,6 +3,12 @@ using System.Collections;
 
 public class HUDScript : MonoBehaviour {
 
+	public Texture btnTexture;
+	public Texture btnTexture2;
+	public Texture btnTexture3;
+	public Texture btnTexture4;
+	public Texture btnTexture5;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -15,7 +21,7 @@ public class HUDScript : MonoBehaviour {
 
 	void OnGUI () {
 		GUI.contentColor = Color.black;
-		GUI.Label(new Rect(10,10,100,90), "Distance: ");
+		GUI.Label(new Rect(10,10,100,90), "Distance: " + Mathf.Ceil(PlayerScript.distance/10));
 
 		// Make a background box
 		//GUI.Box(new Rect(10,10,100,90), "Loader Menu");
@@ -24,6 +30,14 @@ public class HUDScript : MonoBehaviour {
 		if(GUI.Button(new Rect(20,40,80,20), "PAUSE")) {
 			PlayerScript.Pause = !PlayerScript.Pause;
 		}
-		
+
+		if (!btnTexture) {
+			if (GUI.Button(new Rect(10, Screen.height-50, 50, 30), "Click"))
+			{
+			}
+		}
+		else if (GUI.Button(new Rect(10, Screen.height-50, 50, 50), btnTexture))
+		{
+		}		
 	}
 }

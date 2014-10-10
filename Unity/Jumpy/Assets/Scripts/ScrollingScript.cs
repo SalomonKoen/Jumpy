@@ -139,6 +139,7 @@ public class ScrollingScript : MonoBehaviour
             {
 				Vector3 movement = new Vector3(speed.x * direction.x * speedMultiplier, speed.y * direction.y * speedMultiplier, 0);
                 movement *= Time.deltaTime;
+				PlayerScript.distance += -movement.y;
 
                 transform.Translate(movement);
             }
