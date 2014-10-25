@@ -13,4 +13,9 @@ public class Powerup
 		this.value = value;
 		this.type = type;
 	}
+
+	public int getQuantity()
+	{
+		return quantity;
+	}
 }

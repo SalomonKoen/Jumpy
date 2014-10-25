@@ -65,6 +65,11 @@ public abstract class Item
 		quantity++;
 	}
 	
+	public void remove()
+	{
+		quantity--;
+	}
+	
 	public int getImage()
 	{
 		return image;

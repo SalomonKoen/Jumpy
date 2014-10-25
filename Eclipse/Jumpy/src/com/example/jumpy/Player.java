@@ -63,4 +63,21 @@ public class Player
 		
 		return powerups; 
 	}
+
+	public void setPowerups(int[] powerups)
+	{
+		if (powerups.length != 0)
+		{
+			int i = 0;
+			
+			for (Item item : inventory)
+			{
+				if (item instanceof Powerup)
+				{
+					Powerup cur = (Powerup)item;
+					cur.setQuantity(powerups[i++]);
+				}
+			}
+		}
+	}
 }

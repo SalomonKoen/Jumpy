@@ -50,51 +50,14 @@ public class ScrollingScript : MonoBehaviour
 					backgroundPart.Add(child);
 				}
 
-                if (dirNorm.x == 1)
+                if (dirNorm.y == -1)
                 {
-					float scale = screenHeight/height;
-					
 					if (fillScreen)
 					{
-						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
-					}
-
-                    backgroundPart = backgroundPart.OrderByDescending(t => t.position.x).ToList();
-					pos += width*scale + 1;
-                }
-                else if (dirNorm.x == -1)
-                {
-					float scale = screenHeight/height;
-					
-					if (fillScreen)
-					{
-						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
-					}
-
-                    backgroundPart = backgroundPart.OrderBy(t => t.position.x).ToList();
-					pos += width*scale + 1;
-                }
-                else if (dirNorm.y == 1)
-                {
-					float scale = screenWidth/width;
-					
-					if (fillScreen)
-					{
-						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
-					}
-
-					backgroundPart = backgroundPart.OrderByDescending(t => t.position.x).ToList();
-					pos += height*scale + 1;
-                }
-                else if (dirNorm.y == -1)
-                {
-					float scale = screenWidth/width;
-
-					if (fillScreen)
-					{
-						child.localScale = new Vector3(child.localScale.x * scale, child.localScale.y * scale);
-						child.position = new Vector3(0, height*scale/2 + pos, child.position.z);
-						pos += height*scale;
+						float scale = screenWidth/width;
+						child.localScale = new Vector3(scale, scale);
+						child.position = new Vector3(0, child.renderer.bounds.size.y/2 + pos, child.position.z);
+						pos += child.renderer.bounds.size.y;
 					}
 					else
 					{
@@ -121,7 +84,7 @@ public class ScrollingScript : MonoBehaviour
 					Transform last = backgroundPart.Last<Transform>();
 					Transform t = (Transform)Instantiate(last, new Vector3(0, 0), Quaternion.identity);
 					float height = t.renderer.bounds.size.y;
-					t.position = new Vector3(0, height/2 + pos, last.position.z);
+					t.position = new Vector3(last.position.x, t.renderer.bounds.size.y/2 + pos, last.position.z);
 					t.parent = transform;
 					pos += height;
 
@@ -132,8 +95,8 @@ public class ScrollingScript : MonoBehaviour
 			}
 		}
 	}
-
-	void FixedUpdate()
+    
+    void FixedUpdate()
 	{
         if (!paused)
         {
@@ -150,13 +113,14 @@ public class ScrollingScript : MonoBehaviour
                 {
                     firstUp = true;
                     firstPos = transform.position;
-                }
+				}
+
+				height += (speed.y*Time.deltaTime);
+				Debug.Log (getHeight());
 
                 speed = new Vector2(0, rigidbody2D.velocity.y);
 
                 transform.position = new Vector3(transform.position.x, firstPos.y, transform.position.z);
-
-				height += 0.1f;
 		    }
             else if (isLinkedToCamera && rigidbody2D.velocity.y <= 0)
             {
@@ -172,32 +136,11 @@ public class ScrollingScript : MonoBehaviour
                 {
                     Vector3 dirNorm = direction.normalized;
 
-                    if (dirNorm.x == 1 && firstChild.position.x > Camera.main.transform.position.x && !firstChild.renderer.IsVisibleFrom(Camera.main))
+                    if (dirNorm.y == -1 && firstChild.position.y < Camera.main.transform.position.y && !firstChild.renderer.IsVisibleFrom(Camera.main))
                     {
                         Transform lastChild = backgroundPart.LastOrDefault();
                         Vector3 lastPosition = lastChild.transform.position;
-                        Vector3 lastSize = (lastChild.renderer.bounds.max - lastChild.renderer.bounds.min);
-                        Loop(firstChild, new Vector3(lastPosition.x - lastSize.x, firstChild.position.y, firstChild.position.z));
-                    }
-                    else if (dirNorm.x == -1 && firstChild.position.x < Camera.main.transform.position.x && !firstChild.renderer.IsVisibleFrom(Camera.main))
-                    {
-                        Transform lastChild = backgroundPart.LastOrDefault();
-                        Vector3 lastPosition = lastChild.transform.position;
-                        Vector3 lastSize = (lastChild.renderer.bounds.max - lastChild.renderer.bounds.min);
-                        Loop(firstChild, new Vector3(lastPosition.x + lastSize.x, firstChild.position.y, firstChild.position.z));
-                    }
-                    else if (dirNorm.y == 1 && firstChild.position.y > Camera.main.transform.position.y && !firstChild.renderer.IsVisibleFrom(Camera.main))
-                    {
-                        Transform lastChild = backgroundPart.LastOrDefault();
-                        Vector3 lastPosition = lastChild.transform.position;
-                        Vector3 lastSize = (lastChild.renderer.bounds.max - lastChild.renderer.bounds.min);
-                        Loop(firstChild, new Vector3(firstChild.position.x, lastPosition.y - lastSize.y, firstChild.position.z));
-                    }
-                    else if (dirNorm.y == -1 && firstChild.position.y < Camera.main.transform.position.y && !firstChild.renderer.IsVisibleFrom(Camera.main))
-                    {
-                        Transform lastChild = backgroundPart.LastOrDefault();
-                        Vector3 lastPosition = lastChild.transform.position;
-                        Vector3 lastSize = (lastChild.renderer.bounds.max - lastChild.renderer.bounds.min);
+                        Vector3 lastSize = lastChild.renderer.bounds.size;
                         Loop(firstChild, new Vector3(firstChild.position.x, lastPosition.y + lastSize.y, firstChild.position.z));
                     }
                 }

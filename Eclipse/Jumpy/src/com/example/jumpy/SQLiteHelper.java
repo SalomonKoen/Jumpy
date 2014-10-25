@@ -175,9 +175,9 @@ public class SQLiteHelper extends SQLiteOpenHelper
 	{
 		ArrayList<HighScore> highScores = new ArrayList<HighScore>();
 		
-		String sql = "SELECT HighScore.player_id, Player.name, HighScore.score, HighScore.height FROM HighScore, Player "
+		String sql = "SELECT HighScore.player_id, Player.name, HighScore.kills, HighScore.height FROM HighScore, Player "
 				+ "WHERE HighScore.player_id=Player.player_id"
-						+ " ORDER BY score DESC, height DESC;";
+						+ " ORDER BY height DESC, kills;";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);

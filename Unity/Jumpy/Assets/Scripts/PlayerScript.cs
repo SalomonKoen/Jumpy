@@ -3,7 +3,9 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
 
-    public float jumpForce = 7f;
+	public static float speed = 1f;
+
+    public float jumpForce = 10f;
     public float damp = 20;
 
     private bool jump = true;
@@ -14,9 +16,19 @@ public class PlayerScript : MonoBehaviour {
 	private float nextFire = 0.0F;
 
 	private bool move = true;
+
+	private Powerup[] powerups;
+
+	private static Transform curTransform;
+
+	public static Transform getTransform()
+	{
+		return curTransform;
+	}
 	
     void Start()
     {
+		curTransform = transform;
 		transform.position =  new Vector2(0, renderer.bounds.size.y/2);
     }
 
@@ -77,7 +89,7 @@ public class PlayerScript : MonoBehaviour {
 
 	        if (jump)
 	        {
-	            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
+	            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce*speed);
 	            gameObject.layer = 8;
 				transform.GetChild(1).gameObject.layer = 8;
 	            jump = false;
@@ -99,14 +111,14 @@ public class PlayerScript : MonoBehaviour {
 			{
 				transform.position = new Vector2(-width, transform.position.y);
 			}
-
-			if (transform.position.y < 0)
-			{
-				sendData();
-
-				Time.timeScale = 0;
-			}
 		}
+
+		if (transform.position.y + renderer.bounds.size.y < 0)
+		{
+			//sendData();
+			
+            Time.timeScale = 0;
+        }
     }
 
 	public void setJump(bool jump)
@@ -124,11 +136,29 @@ public class PlayerScript : MonoBehaviour {
 		return move;
 	}
 
+	public void setPowerups(Powerup[] powerups)
+	{
+		this.powerups = powerups;
+	}
+
 	private void sendData()
 	{
 		AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"); 
 		AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
 		
 		activity.Call("setHighScore", ScrollingScript.getHeight(), PlayerCollisionScript.getKills());
+		activity.Call("setPowerups", convertPowerups());
     }
+
+	private int[] convertPowerups()
+	{
+		int[] p = new int[powerups.Length];
+
+		for (int i = 0; i < powerups.Length;i++)
+		{
+			p[i] = powerups[i].getQuantity();
+		}
+
+		return p;
+	}
 }

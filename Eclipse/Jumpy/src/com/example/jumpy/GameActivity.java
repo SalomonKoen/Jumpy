@@ -16,6 +16,11 @@ public class GameActivity extends UnityPlayerActivity
         super.onCreate(savedInstanceState);
     }
     
+    public ArrayList<HighScore> getHighScores()
+    {
+    	return application.getHelper().getHighScores(application.getPlayer().getId());
+    }
+    
     public void setHighScore(int height, int kills)
     {
     	application.getHelper().addHighScore(new HighScore(application.getPlayer().getId(), application.getPlayer().getName(), kills, height));
@@ -24,6 +29,11 @@ public class GameActivity extends UnityPlayerActivity
     public ArrayList<Powerup> getPowerups()
     {
     	return application.getPlayer().getPowerups();
+    }
+    
+    public void setPowerups(int[] powerups)
+    {
+    	application.getPlayer().setPowerups(powerups);
     }
 }
 

@@ -37,7 +37,7 @@ public class PlayerCollisionScript : MonoBehaviour {
 				BoxCollider2D collider = collision.gameObject.GetComponent<BoxCollider2D>();
 			
 				float width = collider.size.x*enemy.localScale.x;
-				float height = collider.size.y*enemy.localScale.y;
+				float height = collider.size.y*enemy.localScale.x;
 				
 				if ((player.transform.position.x + boxWidth/2 < enemy.position.x + width/2 || player.transform.position.x - boxWidth/2 > enemy.position.x - width/2) && player.transform.position.y >= enemy.position.y + height/2)
 				{
